@@ -1,0 +1,4 @@
+quart~=0.19.6
+hypercorn~=0.17.3
+aiohttp~=3.9.5
+SQLAlchemy~=2.0.30
