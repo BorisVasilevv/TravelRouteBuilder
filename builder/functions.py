@@ -1,34 +1,37 @@
+from quart import json
+
+from city.functions import get_city_name
 from hotel.functions import get_hotels
 from transport.functions import get_transport
-from transport.query import get_transport_type_name_by_id
 from weather.functions import get_weather
 
 
-async def build_routes(routes_data):
-    routes = []
-    for route_data in routes_data:
-        origin = route_data.get('origin')
-        destination = route_data.get('destination')
-        date = route_data.get('date')
-        preferred_transport = route_data.get('preferred_transport', [])
+async def build_routes(data):
+    city_departure = await get_city_name(data["city_departure"])
+    city_arrival = await get_city_name(data["city_arrival"])
+    date_arrival = data["date_arrival"]
+    date_left = data["date_left"]
+    transport = [data["transport"]]
 
-        # Получаем информацию о маршруте между городами с учетом предпочтительных видов транспорта
-        route = await build_route(origin, destination, date, preferred_transport)
-        routes.append(route)
+    weather_data = await get_weather(city_arrival)
 
-    return {"routes": routes}
+    transport_data = await get_transport(city_departure, city_arrival, date_arrival, transport)
+    transformed_transport_data = [
+        {
+            "price": item["price"],
+            "departure_datetime": item["departure_datetime"],
+            "arrival_datetime": item["arrival_datetime"]
+        }
+        for item in transport_data
+    ]
 
+    hotels_data = get_hotels(city_arrival, date_arrival, date_left)
 
-async def build_route(origin, destination, date, preferred_transport):
-    transport = await get_transport(origin, destination, date, preferred_transport)
-    transport_name = await get_transport_type_name_by_id(transport.id) if transport else None
-    hotels = await get_hotels(destination, date)
-    weather = await get_weather(destination, date)
-
-    return {
-        "origin": origin,
-        "destination": destination,
-        "transport": transport_name,
-        "hotels": hotels,
-        "weather": weather
+    response = {
+        "weather": weather_data,
+        "transport": transformed_transport_data,
+        "hotels": hotels_data
     }
+
+    response_json = json.dumps(response, ensure_ascii=False)
+    return response_json
