@@ -46,6 +46,7 @@ async def get_route():
         return jsonify(routes), 200
 
     except Exception as e:
+        logger.error(e)
         response = "Ошибка при обработке запроса"
         return jsonify(response), 400
 
