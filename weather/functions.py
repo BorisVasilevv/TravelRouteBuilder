@@ -1,16 +1,15 @@
-from config.enviroment import weather_api_key
+import aiohttp
+from config.enviroment import weather_url
 
 
-async def fetch_weather(session, city_name):
-    base_url = "https://api.weatherapi.com/v1/forecast.json"
+async def get_weather(city_name):
+    url = weather_url + f'/{city_name}'
 
-    # Make a request to the API
-    params = {
-        'key': weather_api_key,
-        'q': city_name,
-        'days': 1
-    }
-
-    async with session.get(base_url, params=params) as response:
-        data = await response.json()
-        return data
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            # Проверяем статус ответа
+            if response.status == 200:
+                return await response.json()
+            else:
+                # Обрабатываем случай ошибки HTTP, например:
+                raise ValueError(f"Failed to fetch data: {response.status}")
