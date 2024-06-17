@@ -17,7 +17,7 @@ COPY . .
 CMD ["python", "TravelRouteBuilder.py"]
 
 # Откроем порт для внешних подключений
-EXPOSE 1488
+EXPOSE 6666
 
 # docker build -t TravelRouteBuilder .
-# docker run -p 1488:1488 --name TravelRouteBuilder --network huyandeks_network TravelRouteBuilder
+# docker run -p 6666:6666 --name TravelRouteBuilder TravelRouteBuilder
