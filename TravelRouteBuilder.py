@@ -7,15 +7,9 @@ import logging
 from logging import INFO
 
 from builder.functions import build_routes
-from models.models import *
-from sqlalchemy import create_engine
-from config.db_config import db_url
 
 
 logger = logging.getLogger()
-
-engine = create_engine(db_url)
-Base.metadata.create_all(bind=engine)
 
 
 def __config_logger():
@@ -43,12 +37,11 @@ app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 30 МБ
 async def get_route():
     try:
         data = await request.json
-        routes_data = data.get('routes')
-        if not routes_data:
+        if not data:
             return jsonify("Не найдены маршруты в данных"), 400
 
         # Строим маршруты между городами для каждого маршрута
-        routes = await build_routes(routes_data)
+        routes = await build_routes(data)
 
         return jsonify(routes), 200
 
@@ -60,6 +53,6 @@ async def get_route():
 if __name__ == "__main__":
     __config_logger()
     config = Config()
-    config.bind = ["0.0.0.0:1488"]
+    config.bind = ["0.0.0.0:6666"]
     config.scheme = "http"
     asyncio.run(serve(app, config))
