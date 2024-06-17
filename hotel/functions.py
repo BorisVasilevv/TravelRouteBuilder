@@ -2,12 +2,13 @@ import aiohttp
 from config.enviroment import hotel_url
 
 
-async def get_hotels(city, date):
+async def get_hotels(city, start_date, end_date):
     url = hotel_url
     headers = {'Content-Type': 'application/json'}
     payload = {
         "city": city,
-        "date": date
+        "start_date": start_date,
+        "end_date": end_date
     }
 
     async with aiohttp.ClientSession() as session:
