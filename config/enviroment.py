@@ -1,4 +1,4 @@
-transport_url = "http://localhost:2000/destination"
+transport_url = "https://a43c-5-206-46-75.ngrok-free.app/api/v1/routes/on-date"
 hotel_url = "http://localhost:3000/hotels"
-weather_url = "http://localhost:4000/weather"
-weather_api_key = '9bdb3180de434b12ba7140600241306'
+weather_url = "http://localhost:7777/weather"
+city_url = 'https://a6fb-2a01-540-4349-6a00-c4fa-fae2-f794-3b28.ngrok-free.app'
