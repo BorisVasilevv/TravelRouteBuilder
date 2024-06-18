@@ -9,9 +9,9 @@ async def get_transport(origin, destination, date, preferred_transport):
         "origin": origin,
         "destination": destination,
         "date": date,
-        "preferred_transport": preferred_transport
+        "preferred_transport": [preferred_transport]
     }
 
     async with aiohttp.ClientSession() as session:
-        async with session.post(url, headers=headers, json=payload) as response:
+        async with session.get(url, headers=headers, json=payload) as response:
             return await response.json()

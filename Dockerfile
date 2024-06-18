@@ -19,5 +19,5 @@ CMD ["python", "TravelRouteBuilder.py"]
 # Откроем порт для внешних подключений
 EXPOSE 6666
 
-# docker build -t TravelRouteBuilder .
-# docker run -p 6666:6666 --name TravelRouteBuilder TravelRouteBuilder
+# docker build -t travel_route_builder .
+# docker run -p 6666:6666 --name travel_route_builder travel_route_builder
